@@ -23,8 +23,12 @@ class AddUser extends Component {
     this.props.addUserCallback(this.state)
 
   }
+  isValid = () => {
+    return this.state.username.trim() !== '' && this.state.email.trim() !== '' && this.state.password.trim() !== '';
+  }
 
   render(){
+    const isValid = this.isValid();
     return(
         <div>
             <FormGroup>
@@ -39,9 +43,14 @@ class AddUser extends Component {
                 <Label for="Password">Please enter password</Label>
                 <Input type="password" name="password" id="password" value={this.state.password} onChange={this.handleChange} />
             </FormGroup>
-            <Link to="/">
-              <Button onClick={this.handleAdd}></Button>
-            </Link>
+
+            {isValid ? (
+              <Link to="/">
+                <Button onClick={this.handleAdd}>Add User</Button>
+              </Link>
+            ) : (
+              <Button disabled>Add User</Button>
+            )}     
         </div>
     );
   }
