@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FormGroup, Label, Input, Button, Container, Card, CardBody} from 'reactstrap';
-import {Link } from 'react-router-dom'
+import {Link, withRouter } from 'react-router-dom'
 class AddUser extends Component {
   constructor(props) {
     super(props);
@@ -8,6 +8,7 @@ class AddUser extends Component {
       username: '',
       email: '',
       password: '',
+      message: '',
     };
     }
 
@@ -19,10 +20,24 @@ class AddUser extends Component {
       }));
       console.log(this.state)
   }
-  
-  addUser = async () => {
-    this.props.addUser(this.state)
-  };
+  addUser = async () =>{
+    const response = await fetch('http://127.0.0.1:4999/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(this.state),
+    });
+    if (response.ok) {
+      this.setState( {message: 'User added!' });
+      this.props.fetchData()
+      this.props.history.push('/')
+      return true
+    } else {
+      this.setState( {message: 'User was already registered, Login now'  });
+      return false
+    }
+  }
   isValid = () => {
     return this.state.username.trim() !== '' && this.state.email.trim() !== '' && this.state.password.trim() !== ''
       
@@ -56,7 +71,7 @@ class AddUser extends Component {
             ) : (
               <Button disabled>Add User</Button>
             )}     
-            <p>{this.props.message}</p>
+            <p>{this.state.message}</p>
               </CardBody>
             </Card>  
           </Container>
@@ -65,4 +80,4 @@ class AddUser extends Component {
     );
   }
 }
-export default AddUser;
+export default withRouter(AddUser);
