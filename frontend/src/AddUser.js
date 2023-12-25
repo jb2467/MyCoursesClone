@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FormGroup, Label, Input, Button } from 'reactstrap';
+import { FormGroup, Label, Input, Button, Container, Card, CardBody} from 'reactstrap';
 import {Link } from 'react-router-dom'
 class AddUser extends Component {
   constructor(props) {
@@ -19,19 +19,24 @@ class AddUser extends Component {
       }));
       console.log(this.state)
   }
-  handleAdd =()=>{
-    this.props.addUserCallback(this.state)
-
-  }
+  
+  addUser = async () => {
+    this.props.addUser(this.state)
+  };
   isValid = () => {
-    return this.state.username.trim() !== '' && this.state.email.trim() !== '' && this.state.password.trim() !== '';
+    return this.state.username.trim() !== '' && this.state.email.trim() !== '' && this.state.password.trim() !== ''
+      
   }
 
   render(){
     const isValid = this.isValid();
     return(
         <div>
-            <FormGroup>
+          <h1 style={{ textAlign: 'center' }}>Register your account below</h1>
+          <Container>
+            <Card>
+              <CardBody>
+              <FormGroup>
                 <Label for="Email">Please enter email</Label>
                 <Input type="text" name="email" id="email" value={this.state.email} onChange={this.handleChange} />
             </FormGroup>
@@ -45,12 +50,17 @@ class AddUser extends Component {
             </FormGroup>
 
             {isValid ? (
-              <Link to="/">
-                <Button onClick={this.handleAdd}>Add User</Button>
-              </Link>
+              <Link to="/add" onClick={() => this.addUser()}>
+              <Button color='primary'>Add User</Button>
+            </Link>
             ) : (
               <Button disabled>Add User</Button>
             )}     
+            <p>{this.props.message}</p>
+              </CardBody>
+            </Card>  
+          </Container>
+            
         </div>
     );
   }

@@ -7,6 +7,7 @@ import AddUser from './AddUser';
 
 function App() {
   const [users, setUsers] = useState([]);
+  const [message, setMessage] = useState('')
   const fetchData = async () => {
     const response = await fetch(`http://127.0.0.1:4999/users`);
     const data = await response.json();
@@ -22,17 +23,19 @@ function App() {
   useEffect(() => {
     fetchData();
   }, []);
-  const addUser = (newUser) => {
-    fetch('http://127.0.0.1:4999/users', {
+  const addUser = async (newUser) =>{
+    const response = await fetch('http://127.0.0.1:4999/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(newUser),
-    }).then(()=>{
-      fetchData();
+    });
+    if (response.ok) {
+      setMessage('User added!' );
+    } else {
+      setMessage('User was already registered, Login now' );
     }
-    )
   }
 
 
@@ -40,7 +43,7 @@ function App() {
     <Router>
       <Switch>
         <Route path ='/add'>
-          <AddUser addUserCallback={addUser} />
+          <AddUser addUser={addUser} message={message} />
         </Route>
         <Route path='/'>
         <h1>Users</h1>
