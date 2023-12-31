@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { FormGroup, Label, Input, Button, Container, Card, CardBody, Row, Col} from 'reactstrap';
 import {Link, withRouter } from 'react-router-dom'
-class AddUser extends Component {
+class LoginUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
       username: '',
-      email: '',
       password: '',
       message: '',
     };
@@ -19,18 +18,22 @@ class AddUser extends Component {
         [name]: value,
       }));
   }
-  addUser = async () =>{
-    const response = await fetch('http://127.0.0.1:4999/users', {
+  loginUser = async () =>{
+    const response = await fetch('http://127.0.0.1:4999/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(this.state),
-    });
+    })
+    const data = await response.json();
+
     if (response.ok) {
       this.setState({message: '' });
       this.props.fetchData()
-      this.props.history.push('/login')
+      this.props.history.push('/')
+      localStorage.setItem('username', this.state.username);
+      localStorage.setItem(`sessionToken_${this.state.username}`, data.session_token);
       return true
     } else {
       this.setState( {message: 'User was already registered, Login now'  });
@@ -38,7 +41,7 @@ class AddUser extends Component {
     }
   }
   isValid = () => {
-    return this.state.username.trim() !== '' && this.state.email.trim() !== '' && this.state.password.trim() !== ''
+    return this.state.username.trim() !== ''  && this.state.password.trim() !== ''
       
   }
 
@@ -46,14 +49,10 @@ class AddUser extends Component {
     const isValid = this.isValid();
     return(
         <div>
-          <h1 style={{ textAlign: 'center' }}>Register your account below</h1>
+          <h1 style={{ textAlign: 'center' }}>Login Below</h1>
           <Container>
             <Card>
               <CardBody>
-                <FormGroup>
-                  <Label for="Email">Please enter email</Label>
-                  <Input type="text" name="email" id="email" value={this.state.email} onChange={this.handleChange} />
-                </FormGroup>
                 <FormGroup>
                   <Label for="Username">Please enter username</Label>
                   <Input type="text" name="username" id="username" value={this.state.username} onChange={this.handleChange} />
@@ -65,16 +64,16 @@ class AddUser extends Component {
                 <Row className="justify-content-end">
                   <Col md='9'>
                     {isValid ? (
-                      <Link to="/register" onClick={() => this.addUser()}>
-                        <Button color='primary'>Add User</Button>
+                      <Link to="/" onClick={() => this.loginUser()}>
+                        <Button color='primary'>Login</Button>
                       </Link>
                     ) : (
-                      <Button disabled>Add User</Button>
+                      <Button disabled>Login</Button>
                     )}     
                   </Col>
                   <Col md='3'>
-                    <Link to="/login">
-                      <Button className= 'login' color="success">Login</Button>
+                    <Link to="/register">
+                      <Button className= 'login' color="success">Register an account</Button>
                     </Link>
                   </Col>
                 </Row>
@@ -86,4 +85,4 @@ class AddUser extends Component {
     );
   }
 }
-export default withRouter(AddUser);
+export default withRouter(LoginUser);

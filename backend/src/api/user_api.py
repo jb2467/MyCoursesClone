@@ -22,9 +22,6 @@ class Users(Resource):
         password = hashlib.sha512(bytes(data.get('password'), 'ascii')).hexdigest() 
         user = (users_db.get_user(username,email))
         if len(user)>0:
-            print('hhelo')
             return '',400
-        print(user, 'user')
         users_db.add_user((id, username,password,email, ''))
-        print(users_db.get_users());
         return  '' ,200
