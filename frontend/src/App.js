@@ -24,19 +24,17 @@ function App() {
   return (
     <Router>
       <Switch>
-      <Route path ='/register'>
-          <AddUser fetchData={fetchData}  />
-        </Route>
+
         <Route path ='/login'>
           <LoginUser fetchData={fetchData} ></LoginUser>
         </Route>
-        <Route path='/'>
+        <Route path='/home'>
           <h1>Users</h1>
           <LogoutUser fetchData={fetchData}></LogoutUser>
           <div className='App'>
             <Row md = '12'>
               {users.map((u) => (
-                <Col key={u.id} md='4'>
+                <Col key={u.username} md='4'>
                   <Card className="">
                     <p>{u.username}</p>
                     <p>{u.email}</p>
@@ -46,6 +44,9 @@ function App() {
               ))}
             </Row>    
           </div>
+        </Route>
+        <Route path ='/'>
+          <AddUser fetchData={fetchData}  />
         </Route>
       </Switch>
     </Router>

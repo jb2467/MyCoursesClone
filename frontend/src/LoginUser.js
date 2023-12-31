@@ -36,7 +36,7 @@ class LoginUser extends Component {
       localStorage.setItem(`sessionToken_${this.state.username}`, data.session_token);
       return true
     } else {
-      this.setState( {message: 'User was already registered, Login now'  });
+      this.setState( {message: 'Please check username and password, and if the account exists'  });
       return false
     }
   }
@@ -64,7 +64,7 @@ class LoginUser extends Component {
                 <Row className="justify-content-end">
                   <Col md='9'>
                     {isValid ? (
-                      <Link to="/" onClick={() => this.loginUser()}>
+                      <Link to="/login" onClick={() => this.loginUser()}>
                         <Button color='primary'>Login</Button>
                       </Link>
                     ) : (
@@ -72,7 +72,7 @@ class LoginUser extends Component {
                     )}     
                   </Col>
                   <Col md='3'>
-                    <Link to="/register">
+                    <Link to="/">
                       <Button className= 'login' color="success">Register an account</Button>
                     </Link>
                   </Col>

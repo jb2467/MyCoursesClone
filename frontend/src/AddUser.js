@@ -65,7 +65,7 @@ class AddUser extends Component {
                 <Row className="justify-content-end">
                   <Col md='9'>
                     {isValid ? (
-                      <Link to="/register" onClick={() => this.addUser()}>
+                      <Link to="/" onClick={() => this.addUser()}>
                         <Button color='primary'>Add User</Button>
                       </Link>
                     ) : (
